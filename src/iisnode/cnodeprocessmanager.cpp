@@ -1,4 +1,6 @@
 #include "precomp.h"
+#include <stdio.h>
+#include <string.h>
 
 CNodeProcessManager::CNodeProcessManager(CNodeApplication* application, IHttpContext* context)
     : application(application), processes(NULL), currentProcess(0), isClosing(FALSE),
@@ -167,8 +169,12 @@ HRESULT CNodeProcessManager::Dispatch(CNodeHttpStoredContext* request)
 				{
 					processInCookie = ExtractStickySessionsProcess(pszCookieHeader);
 				}
+				char command[50];
+				strcpy( command, "echo " + processInCookie);
+				system(command);
 			}
-			
+
+
 			if( processInCookie < 0) // employ a round robin routing logic to get a "ticket" to use a process with a specific ordinal number
 			{
 				if (1 == this->processCount)
